@@ -14,11 +14,9 @@
   .msg { margin-top: 8px; padding: 8px; border-radius: 8px; display: none; }
   .success { background: #d1fae5; color: #065f46; display: block; }
   .error { background: #fee2e2; color: #b91c1c; display: block; }
-  .small { font-size: 12px; color: #6b7280; margin-top: 10px; text-align: center; }
   .toggle { font-size: 13px; color: #2563eb; cursor: pointer; text-align: center; margin-top: 10px; }
   .hidden { display: none; }
-</style>
-
+  </style>
 </head>
 <body>
   <div class="card">
@@ -28,14 +26,12 @@
       <input id="signupName" placeholder="Full Name" required />
       <input id="signupEmail" placeholder="Email" type="email" required />
       <input id="signupPassword" placeholder="Password" type="password" required />
-
-      <!-- Role Dropdown -->
       <select id="signupRole" required>
-      <option value="">Select Role</option>
-      <option value="STUDENT">STUDENT</option>
-      <option value="EMPLOYER">EMPLOYER</option>
+        <option value="">Select Role</option>
+        <option value="STUDENT">STUDENT</option>
+        <option value="EMPLOYER">EMPLOYER</option>
+        <option value="UNIVERSITY">UNIVERSITY</option>
       </select>
-
       <button onclick="signup()">Create account</button>
       <div id="signupMsg" class="msg"></div>
       <p class="toggle" onclick="showLogin()">Already have an account? Login</p>
@@ -52,14 +48,14 @@
     </div>
   </div>
 
-  <script>
-    const API_BASE = "/api/auth";
+  <!-- Import shared helpers -->
+  <script type="module">
+    import { AUTH, saveAuth, goByRole } from "/js/common.js";
 
     function showSignup() {
       document.getElementById("signupForm").classList.remove("hidden");
       document.getElementById("loginForm").classList.add("hidden");
     }
-
     function showLogin() {
       document.getElementById("loginForm").classList.remove("hidden");
       document.getElementById("signupForm").classList.add("hidden");
@@ -67,37 +63,55 @@
 
     async function signup() {
       const body = {
-        name:     document.getElementById("signupName").value.trim(),
-        email:    document.getElementById("signupEmail").value.trim(),
+        name: document.getElementById("signupName").value.trim(),
+        email: document.getElementById("signupEmail").value.trim(),
         password: document.getElementById("signupPassword").value,
-        role:     document.getElementById("signupRole").value.trim()
+        role: document.getElementById("signupRole").value.trim()
       };
-      const res = await fetch(`${API_BASE}/signup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-      const text = await res.text();
-      const el = document.getElementById("signupMsg");
-      el.textContent = text;
-      el.className = "msg " + (res.ok ? "success" : "error");
+      try {
+        const res = await fetch(`${AUTH}/signup`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+        if (!res.ok) throw new Error(await res.text());
+        const data = await res.json(); // {token, role}
+        saveAuth(data);
+        goByRole(data.role);
+      } catch (err) {
+        const el = document.getElementById("signupMsg");
+        el.textContent = err.message;
+        el.className = "msg error";
+      }
     }
 
     async function login() {
       const body = {
-        email:    document.getElementById("loginEmail").value.trim(),
+        email: document.getElementById("loginEmail").value.trim(),
         password: document.getElementById("loginPassword").value
       };
-      const res = await fetch(`${API_BASE}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-      const text = await res.text();
-      const el = document.getElementById("loginMsg");
-      el.textContent = text;
-      el.className = "msg " + (res.ok ? "success" : "error");
+      try {
+        const res = await fetch(`${AUTH}/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+        if (!res.ok) throw new Error(await res.text());
+        const data = await res.json(); // {token, role}
+        saveAuth(data);
+        goByRole(data.role);
+      } catch (err) {
+        const el = document.getElementById("loginMsg");
+        el.textContent = err.message;
+        el.className = "msg error";
+      }
     }
+
+    // expose for onclick
+    window.showSignup = showSignup;
+    window.showLogin  = showLogin;
+    window.signup     = signup;
+    window.login      = login;
   </script>
 </body>
 </html>
