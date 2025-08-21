@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login / Signup</title>
+  <style>
+  body { font-family: Arial, sans-serif; background: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+  .card { background: #fff; padding: 20px; border-radius: 12px; width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,.1); }
+  h2 { margin: 12px 0 8px; text-align: center; }
+  input, select { width: 100%; padding: 10px; margin: 6px 0; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 14px; height: 42px; box-sizing: border-box;}
+  button { width: 100%; padding: 10px; border: none; background: #2563eb; color: #fff; border-radius: 8px; margin-top: 8px; cursor: pointer; font-weight: 600; }
+  button:hover { background: #1e4fcc; }
+  .msg { margin-top: 8px; padding: 8px; border-radius: 8px; display: none; }
+  .success { background: #d1fae5; color: #065f46; display: block; }
+  .error { background: #fee2e2; color: #b91c1c; display: block; }
+  .small { font-size: 12px; color: #6b7280; margin-top: 10px; text-align: center; }
+  .toggle { font-size: 13px; color: #2563eb; cursor: pointer; text-align: center; margin-top: 10px; }
+  .hidden { display: none; }
+</style>
+
+</head>
+<body>
+  <div class="card">
+    <!-- Signup Form -->
+    <div id="signupForm">
+      <h2>Signup</h2>
+      <input id="signupName" placeholder="Full Name" required />
+      <input id="signupEmail" placeholder="Email" type="email" required />
+      <input id="signupPassword" placeholder="Password" type="password" required />
+
+      <!-- Role Dropdown -->
+      <select id="signupRole" required>
+      <option value="">Select Role</option>
+      <option value="STUDENT">STUDENT</option>
+      <option value="EMPLOYER">EMPLOYER</option>
+      </select>
+
+      <button onclick="signup()">Create account</button>
+      <div id="signupMsg" class="msg"></div>
+      <p class="toggle" onclick="showLogin()">Already have an account? Login</p>
+    </div>
+
+    <!-- Login Form -->
+    <div id="loginForm" class="hidden">
+      <h2>Login</h2>
+      <input id="loginEmail" placeholder="Email" type="email" required />
+      <input id="loginPassword" placeholder="Password" type="password" required />
+      <button onclick="login()">Login</button>
+      <div id="loginMsg" class="msg"></div>
+      <p class="toggle" onclick="showSignup()">New user? Create account</p>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "/api/auth";
+
+    function showSignup() {
+      document.getElementById("signupForm").classList.remove("hidden");
+      document.getElementById("loginForm").classList.add("hidden");
+    }
+
+    function showLogin() {
+      document.getElementById("loginForm").classList.remove("hidden");
+      document.getElementById("signupForm").classList.add("hidden");
+    }
+
+    async function signup() {
+      const body = {
+        name:     document.getElementById("signupName").value.trim(),
+        email:    document.getElementById("signupEmail").value.trim(),
+        password: document.getElementById("signupPassword").value,
+        role:     document.getElementById("signupRole").value.trim()
+      };
+      const res = await fetch(`${API_BASE}/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      const text = await res.text();
+      const el = document.getElementById("signupMsg");
+      el.textContent = text;
+      el.className = "msg " + (res.ok ? "success" : "error");
+    }
+
+    async function login() {
+      const body = {
+        email:    document.getElementById("loginEmail").value.trim(),
+        password: document.getElementById("loginPassword").value
+      };
+      const res = await fetch(`${API_BASE}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      const text = await res.text();
+      const el = document.getElementById("loginMsg");
+      el.textContent = text;
+      el.className = "msg " + (res.ok ? "success" : "error");
+    }
+  </script>
+</body>
+</html>
