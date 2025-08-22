@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="navbar">
+    <span>Student Dashboard</span>
+    <a href="profile.html">Profile</a>
+    <a href="projects.html">Projects</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="feedback.html">Feedback</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </div>
+  <div class="container">
+    <h1>Welcome Student</h1>
+    <div class="card">
+      <h3>Active Applications</h3>
+      <ul id="applicationsList"></ul>
+    </div>
+  </div>
+  <script type="module">
+    import { getAuth, logout } from "/js/common.js";
+    window.logout = logout;
+
+    async function loadApplications() {
+      const { token } = getAuth();
+      const res = await fetch("/api/applications/mine", {
+        headers: { "Authorization": "Bearer " + token }
+      });
+      const apps = await res.json();
+      document.getElementById("applicationsList").innerHTML =
+        apps.map(a => `<li>${a.projectTitle} - ${a.status}</li>`).join("");
+    }
+    loadApplications();
+  </script>
+</body>
+</html>

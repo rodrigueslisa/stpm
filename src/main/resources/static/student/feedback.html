@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Feedback</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="navbar">
+    <span>Feedback</span>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </div>
+  <div class="container">
+    <h2>Feedback</h2>
+    <textarea id="feedback" rows="5" style="width:100%"></textarea><br>
+    <button onclick="submitFeedback()">Submit</button>
+  </div>
+  <script type="module">
+    import { getAuth, logout } from "/js/common.js";
+    window.logout = logout;
+
+    async function submitFeedback() {
+      const { token } = getAuth();
+      await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+        body: JSON.stringify({ content: document.getElementById("feedback").value })
+      });
+      alert("Feedback submitted!");
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Support Center</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="navbar">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="students.html">Students</a>
+    <a href="employers.html">Employers</a>
+    <a href="certifications.html">Certifications</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </div>
+  <div class="container">
+    <h2>Support Requests</h2>
+    <textarea id="supportText" placeholder="Enter support request" rows="5"></textarea><br>
+    <button onclick="sendSupport()">Send</button>
+  </div>
+  <script type="module">
+    import { getAuth, logout } from "/js/common.js";
+    window.logout = logout;
+
+    async function sendSupport() {
+      const { token } = getAuth();
+      await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+        body: JSON.stringify({ content: document.getElementById("supportText").value })
+      });
+      alert("Request sent!");
+    }
+  </script>
+</body>
+</html>

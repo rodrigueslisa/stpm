@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Available Projects</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="navbar">
+    <span>Projects</span>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </div>
+  <div class="container">
+    <h2>Available Projects</h2>
+    <div id="projects"></div>
+  </div>
+  <script type="module">
+    import { getAuth, logout } from "/js/common.js";
+    window.logout = logout;
+
+    async function loadProjects() {
+      const { token } = getAuth();
+      const res = await fetch("/api/projects", {
+        headers: { "Authorization": "Bearer " + token }
+      });
+      const projects = await res.json();
+      document.getElementById("projects").innerHTML = projects.map(
+        p => `<div class="card">
+                <h3>${p.title}</h3>
+                <p>${p.description}</p>
+                <button onclick="apply(${p.id})">Apply</button>
+              </div>`).join("");
+    }
+
+    async function apply(id) {
+      const { token } = getAuth();
+      await fetch(`/api/applications/apply/${id}`, {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + token }
+      });
+      alert("Application submitted!");
+    }
+
+    loadProjects();
+  </script>
+</body>
+</html>

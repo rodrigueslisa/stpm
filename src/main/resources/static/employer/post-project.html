@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Post New Project</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="navbar">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="candidates.html">Candidates</a>
+    <a href="tracking.html">Tracking</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </div>
+
+  <div class="container">
+    <h2>Post a New Project</h2>
+    <input id="title" placeholder="Project Title"/>
+    <textarea id="description" placeholder="Description" rows="5"></textarea><br>
+    <button onclick="postProject()">Submit</button>
+  </div>
+
+  <script type="module">
+    import { getAuth, logout } from "/js/common.js";
+    window.logout = logout;
+
+    async function postProject() {
+      const { token } = getAuth();
+      const body = {
+        title: document.getElementById("title").value.trim(),
+        description: document.getElementById("description").value.trim()
+      };
+      await fetch("/api/projects", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+        body: JSON.stringify(body)
+      });
+      alert("Project posted!");
+    }
+  </script>
+</body>
+</html>

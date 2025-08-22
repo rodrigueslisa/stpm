@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Manage Employers</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="navbar">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="students.html">Students</a>
+    <a href="certifications.html">Certifications</a>
+    <a href="support.html">Support</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </div>
+  <div class="container">
+    <h2>Employers</h2>
+    <div id="employers"></div>
+  </div>
+  <script type="module">
+    import { getAuth, logout } from "/js/common.js";
+    window.logout = logout;
+
+    async function loadEmployers() {
+      const { token } = getAuth();
+      const res = await fetch("/api/users?role=EMPLOYER", {
+        headers: { "Authorization": "Bearer " + token }
+      });
+      const users = await res.json();
+      document.getElementById("employers").innerHTML = users.map(
+        u => `<div class="card">
+                <p>${u.name} (${u.email})</p>
+              </div>`).join("");
+    }
+    loadEmployers();
+  </script>
+</body>
+</html>

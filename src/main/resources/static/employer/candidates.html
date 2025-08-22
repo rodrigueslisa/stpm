@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Candidate Applications</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="navbar">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="post-project.html">Post Project</a>
+    <a href="tracking.html">Tracking</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </div>
+
+  <div class="container">
+    <h2>Applications</h2>
+    <div id="applications"></div>
+  </div>
+
+  <script type="module">
+    import { getAuth, logout } from "/js/common.js";
+    window.logout = logout;
+
+    async function loadApps() {
+      const { token } = getAuth();
+      const res = await fetch("/api/applications/for-employer", {
+        headers: { "Authorization": "Bearer " + token }
+      });
+      const apps = await res.json();
+      document.getElementById("applications").innerHTML = apps.map(
+        a => `<div class="card">
+                <p><b>${a.studentName}</b> applied for <b>${a.projectTitle}</b></p>
+                <p>Status: ${a.status}</p>
+                <button onclick="accept(${a.id})">Accept</button>
+                <button onclick="reject(${a.id})">Reject</button>
+              </div>`).join("");
+    }
+
+    async function accept(id) {
+      const { token } = getAuth();
+      await fetch(`/api/applications/${id}/accept`, {
+        method: "PUT", headers: { "Authorization": "Bearer " + token }
+      });
+      loadApps();
+    }
+
+    async function reject(id) {
+      const { token } = getAuth();
+      await fetch(`/api/applications/${id}/reject`, {
+        method: "PUT", headers: { "Authorization": "Bearer " + token }
+      });
+      loadApps();
+    }
+
+    loadApps();
+  </script>
+</body>
+</html>

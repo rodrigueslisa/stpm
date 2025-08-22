@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>University Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="navbar">
+    <span>University Dashboard</span>
+    <a href="students.html">Students</a>
+    <a href="employers.html">Employers</a>
+    <a href="certifications.html">Certifications</a>
+    <a href="support.html">Support</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </div>
+  <div class="container">
+    <h1>University Overview</h1>
+    <div id="summary"></div>
+  </div>
+  <script type="module">
+    import { getAuth, logout } from "/js/common.js";
+    window.logout = logout;
+
+    async function loadSummary() {
+      const { token } = getAuth();
+      const res = await fetch("/api/university/summary", {
+        headers: { "Authorization": "Bearer " + token }
+      });
+      const s = await res.json();
+      document.getElementById("summary").innerHTML =
+        `<p>Students: ${s.students}</p>
+         <p>Employers: ${s.employers}</p>
+         <p>Projects: ${s.projects}</p>`;
+    }
+    loadSummary();
+  </script>
+</body>
+</html>

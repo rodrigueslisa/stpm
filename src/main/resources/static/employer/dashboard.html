@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Employer Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="navbar">
+    <span>Employer Dashboard</span>
+    <a href="post-project.html">Post Project</a>
+    <a href="candidates.html">Candidates</a>
+    <a href="tracking.html">Tracking</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </div>
+  <div class="container">
+    <h1>My Projects</h1>
+    <div id="projects"></div>
+  </div>
+
+  <script type="module">
+    import { getAuth, logout } from "/js/common.js";
+    window.logout = logout;
+
+    async function loadProjects() {
+      const { token } = getAuth();
+      const res = await fetch("/api/projects/mine", {
+        headers: { "Authorization": "Bearer " + token }
+      });
+      const projects = await res.json();
+      document.getElementById("projects").innerHTML = projects.map(
+        p => `<div class="card">
+                <h3>${p.title}</h3>
+                <p>${p.description}</p>
+                <small>Status: ${p.status}</small>
+              </div>`).join("");
+    }
+    loadProjects();
+  </script>
+</body>
+</html>

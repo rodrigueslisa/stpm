@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Project Tracking</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="navbar">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="post-project.html">Post Project</a>
+    <a href="candidates.html">Candidates</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </div>
+
+  <div class="container">
+    <h2>Tracking Submissions</h2>
+    <div id="submissions"></div>
+  </div>
+
+  <script type="module">
+    import { getAuth, logout } from "/js/common.js";
+    window.logout = logout;
+
+    async function loadSubs() {
+      const { token } = getAuth();
+      const res = await fetch("/api/submissions/for-employer", {
+        headers: { "Authorization": "Bearer " + token }
+      });
+      const subs = await res.json();
+      document.getElementById("submissions").innerHTML = subs.map(
+        s => `<div class="card">
+                <h4>${s.projectTitle}</h4>
+                <p>Submitted by: ${s.studentName}</p>
+                <p>File: <a href="/api/submissions/${s.id}/download">Download</a></p>
+              </div>`).join("");
+    }
+    loadSubs();
+  </script>
+</body>
+</html>

@@ -1,19 +1,39 @@
-:root { --blue:#2563eb; --bg:#f4f4f4; --border:#e5e7eb; --text:#111827; }
-*{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,Arial;background:var(--bg)}
-.container{max-width:1000px;margin:32px auto;padding:0 16px}
-.card{background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.06);padding:16px;margin-bottom:16px}
-.row{display:flex;gap:16px;flex-wrap:wrap}
-.col{flex:1 1 320px}
-h1{margin:0 0 12px}
-h2{margin:0 0 10px}
-input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid #ddd;border-radius:8px;font:inherit;height:42px}
-button{padding:10px 14px;border:none;border-radius:8px;background:var(--blue);color:#fff;cursor:pointer;font-weight:600}
-button.secondary{background:#1118270d;color:#111827}
-.table{width:100%;border-collapse:collapse}
-.table th,.table td{border-top:1px solid var(--border);padding:8px;text-align:left}
-.badge{display:inline-block;padding:2px 8px;border-radius:999px;background:#e5edff;color:#1e3a8a;font-size:12px}
-.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px;flex-wrap:wrap}
-.notice{padding:10px;border-radius:8px;background:#eef2ff;border:1px solid #c7d2fe;margin:8px 0}
-.error{background:#fee2e2;border-color:#fecaca}
-.hidden{display:none}
-.link{color:var(--blue);cursor:pointer;text-decoration:underline}
+body {
+  font-family: Arial, sans-serif;
+  background: #f9fafb;
+  margin: 0;
+  padding: 0;
+}
+.navbar {
+  background: #2563eb;
+  padding: 10px;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.navbar a {
+  color: #fff;
+  margin: 0 10px;
+  text-decoration: none;
+  font-weight: 500;
+}
+.navbar a:hover { text-decoration: underline; }
+.container { padding: 20px; }
+.card {
+  background: #fff;
+  padding: 20px;
+  margin: 10px 0;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+h1, h2 { color: #111827; }
+button {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+button:hover { background: #1e40af; }

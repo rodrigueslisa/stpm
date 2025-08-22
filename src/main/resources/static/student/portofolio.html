@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Portfolio</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="navbar">
+    <span>Portfolio</span>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </div>
+  <div class="container">
+    <h2>My Portfolio</h2>
+    <textarea id="portfolio" rows="8" style="width:100%"></textarea><br>
+    <button onclick="savePortfolio()">Save</button>
+  </div>
+  <script type="module">
+    import { getAuth, logout } from "/js/common.js";
+    window.logout = logout;
+
+    async function savePortfolio() {
+      const { token } = getAuth();
+      await fetch("/api/users/portfolio", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+        body: JSON.stringify({ content: document.getElementById("portfolio").value })
+      });
+      alert("Saved!");
+    }
+  </script>
+</body>
+</html>
