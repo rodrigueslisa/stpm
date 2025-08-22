@@ -130,7 +130,7 @@
       <button class="btn-primary" onclick="login()">Login</button>
       <a class="forgot" onclick="showForgot()">Forgot Password?</a>
       <div id="loginMsg" class="msg"></div>
-      <span class="toggle" onclick="showSignup()">New here? Sign Up</span>
+      <span class="toggle" onclick="showSignup()"><b>New here? Sign Up</b></span>
     </div>
 
     <!-- SIGNUP -->
@@ -152,7 +152,7 @@
       </select>
       <button class="btn-primary" onclick="signup()">Sign Up</button>
       <div id="signupMsg" class="msg"></div>
-      <span class="toggle" onclick="showLogin()">Already have an account? Login</span>
+      <span class="toggle" onclick="showLogin()"><b>Already have an account? Login</b></span>
     </div>
 
     <!-- FORGOT PASSWORD -->
@@ -163,7 +163,7 @@
       <input id="forgotEmail" type="email" placeholder="Email" required />
       <button class="btn-primary" onclick="resetPassword()">Send Reset Link</button>
       <div id="forgotMsg" class="msg"></div>
-      <span class="toggle" onclick="showLogin()">Back to Login</span>
+      <span class="toggle" onclick="showLogin()"><b>Back to Login</b></span>
     </div>
   </div>
 
@@ -209,7 +209,12 @@
       const data = await res.json().catch(() => ({}));
       const el = document.getElementById("loginMsg");
       if (res.ok) {
-        saveAuth(data.token, data.role, data.name, data.email);
+        saveAuth({
+          token: data.token,
+          role: data.role,
+          name: data.name,
+          email: data.email
+        });
         goByRole();
       } else {
         el.textContent = data.error || "Login failed!";
@@ -232,7 +237,12 @@
       const data = await res.json().catch(() => ({}));
       const el = document.getElementById("signupMsg");
       if (res.ok) {
-        saveAuth(data.token, data.role, data.name, data.email);
+        saveAuth({
+          token: data.token,
+          role: data.role,
+          name: data.name,
+          email: data.email
+        });
         goByRole();
       } else {
         el.textContent = data.error || "Signup failed!";

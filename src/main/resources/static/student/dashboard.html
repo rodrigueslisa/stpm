@@ -1,39 +1,279 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Student Dashboard</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard - SkillToProject</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #f9fafb;
+      color: #111827;
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background: #fff;
+      border-right: 1px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100vh;
+      padding: 20px;
+    }
+    .sidebar h2 { font-size: 16px; margin-bottom: 12px; }
+    .menu a {
+      display: block;
+      padding: 10px;
+      border-radius: 6px;
+      color: #374151;
+      text-decoration: none;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    .menu a:hover { background: #f3f4f6; color: #2563eb; }
+    .sidebar-bottom {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    /* Main area */
+    .main {
+      flex: 1;
+      padding: 20px 40px;
+      overflow-y: auto;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .navbar ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      gap: 20px;
+    }
+    .navbar a {
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      color: #374151;
+    }
+    .navbar a:hover { color: #2563eb; }
+
+    .user-icon {
+      background: #2563eb;
+      color: #fff;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Welcome card */
+    .welcome {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    }
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .profile-avatar {
+      background: #dbeafe;
+      color: #2563eb;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .progress-bar {
+      height: 8px;
+      border-radius: 4px;
+      background: #e5e7eb;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 75%;
+      background: #2563eb;
+    }
+
+    /* Projects grid */
+    .projects {
+      margin-bottom: 32px;
+    }
+    .projects h3 { margin-bottom: 16px; }
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .project-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    }
+    .project-card h4 { margin: 0 0 6px; font-size: 16px; }
+    .tags span {
+      display: inline-block;
+      background: #f3f4f6;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      margin-right: 4px;
+      margin-bottom: 4px;
+    }
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 12px;
+    }
+    .btn {
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-outline { border: 1px solid #d1d5db; background: #fff; }
+    .btn-primary { background: #2563eb; color: #fff; }
+
+    /* Notifications */
+    .notifications {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    }
+    .notif-item {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 10px 0;
+      font-size: 14px;
+    }
+    .notif-item:last-child { border: none; }
+    .notif-time { font-size: 12px; color: #6b7280; }
+  </style>
 </head>
 <body>
-  <div class="navbar">
-    <span>Student Dashboard</span>
-    <a href="profile.html">Profile</a>
-    <a href="projects.html">Projects</a>
-    <a href="portfolio.html">Portfolio</a>
-    <a href="feedback.html">Feedback</a>
-    <a href="#" onclick="logout()">Logout</a>
-  </div>
-  <div class="container">
-    <h1>Welcome Student</h1>
-    <div class="card">
-      <h3>Active Applications</h3>
-      <ul id="applicationsList"></ul>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div>
+      <div class="menu">
+        <a href="#">Search Projects</a>
+        <a href="#">Saved Projects</a>
+        <a href="#">My Applications</a>
+      </div>
     </div>
-  </div>
-  <script type="module">
-    import { getAuth, logout } from "/js/common.js";
-    window.logout = logout;
+    <div class="sidebar-bottom">
+      <p>⚙ Settings</p>
+      <p>❓ Help & Support</p>
+      <p>👤 Jane Doe</p>
+    </div>
+  </aside>
 
-    async function loadApplications() {
-      const { token } = getAuth();
-      const res = await fetch("/api/applications/mine", {
-        headers: { "Authorization": "Bearer " + token }
-      });
-      const apps = await res.json();
-      document.getElementById("applicationsList").innerHTML =
-        apps.map(a => `<li>${a.projectTitle} - ${a.status}</li>`).join("");
-    }
-    loadApplications();
-  </script>
+  <!-- Main content -->
+  <main class="main">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Profile</a></li>
+        <li><a href="#">Projects</a></li>
+        <li><a href="#">Applications</a></li>
+        <li><a href="#">Portfolio</a></li>
+        <li><a href="#">Feedback</a></li>
+        <li><a href="#">Support</a></li>
+      </ul>
+      <div class="user-icon">J</div>
+    </nav>
+
+    <!-- Welcome -->
+    <section class="welcome">
+      <h2>Good Morning, Jane Doe!</h2>
+      <div class="profile">
+        <div class="profile-avatar">J</div>
+        <div>
+          <p><strong>Jane Doe</strong><br/>Computer Science Student</p>
+          <p>Profile Completeness: 75%</p>
+          <div class="progress-bar"><div class="progress-fill"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recommended Projects -->
+    <section class="projects">
+      <h3>Recommended Projects</h3>
+      <div class="project-grid">
+        <div class="project-card">
+          <h4>AI-Powered Chatbot Development</h4>
+          <p>Tech Innovations Inc.</p>
+          <div class="tags">
+            <span>Python</span><span>Machine Learning</span><span>NLP</span>
+          </div>
+          <p><small>Due: Aug 1, 2025</small></p>
+          <div class="actions">
+            <button class="btn btn-outline">View Details</button>
+            <button class="btn btn-primary">Apply Now</button>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <h4>E-commerce Website Redesign</h4>
+          <p>Global Retail Solutions</p>
+          <div class="tags">
+            <span>ReactJS</span><span>TailwindCSS</span><span>UI/UX</span>
+          </div>
+          <p><small>Due: Sep 15, 2025</small></p>
+          <div class="actions">
+            <button class="btn btn-outline">View Details</button>
+            <button class="btn btn-primary">Apply Now</button>
+          </div>
+        </div>
+        <!-- Add more project cards here -->
+      </div>
+    </section>
+
+    <!-- Notifications -->
+    <section class="notifications">
+      <h3>Recent Notifications</h3>
+      <div class="notif-item">
+        ✅ Your application for "AI-Powered Chatbot Development" has been successfully submitted.
+        <div class="notif-time">2 hours ago</div>
+      </div>
+      <div class="notif-item">
+        🔔 New recommended project: "Data Visualization Dashboard" matches your skills!
+        <div class="notif-time">5 hours ago</div>
+      </div>
+      <div class="notif-item">
+        ⚠ Action required: Your "E-commerce Website Redesign" application needs a cover letter.
+        <div class="notif-time">Yesterday</div>
+      </div>
+    </section>
+  </main>
 </body>
 </html>
